@@ -7,7 +7,7 @@ use serde_json::json;
 #[derive(Debug)]
 pub enum AppError {
     InternalServerError,
-    ObjectNotFoundError,
+    ObjectNotFound,
 }
 
 impl IntoResponse for AppError {
@@ -16,7 +16,7 @@ impl IntoResponse for AppError {
             AppError::InternalServerError => {
                 (StatusCode::INTERNAL_SERVER_ERROR, "Internal server error")
             }
-            AppError::ObjectNotFoundError => (StatusCode::NOT_FOUND, "Object has not been found"),
+            AppError::ObjectNotFound => (StatusCode::NOT_FOUND, "Object not found"),
         };
         (status, Json(json!(err_msg))).into_response()
     }
