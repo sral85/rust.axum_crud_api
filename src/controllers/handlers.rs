@@ -7,7 +7,7 @@ use serde_json::{json, Value};
 
 use sqlx::PgPool;
 
-use crate::errors::errors::AppError;
+use crate::errors::app_errors::AppError;
 use crate::models::todo::{NewToDo, ToDo, UpdateToDo};
 
 pub async fn get_todo(
@@ -46,7 +46,7 @@ pub async fn create_todo(
 
     let sql = "INSERT INTO todo (description) values ($1)";
 
-    let _ = sqlx::query(&sql)
+    let _ = sqlx::query(sql)
         .bind(&new_todo.description)
         .execute(&pool)
         .await

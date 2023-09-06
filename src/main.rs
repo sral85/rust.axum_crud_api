@@ -4,7 +4,6 @@ use axum::{
     Router,
 };
 use sqlx::postgres::PgPoolOptions;
-use tokio;
 
 use std::{env, net::SocketAddr};
 
