@@ -56,7 +56,7 @@ pub async fn delete_todo(
     Path(id): Path<i32>,
     Extension(pool): Extension<PgPool>,
 ) -> Result<(StatusCode, Json<Value>), AppError> {
-    let _find = sqlx::query("SELECT * FROM todo where id=$1::int4")
+    let _find = sqlx::query("SELECT * FROM todo where todo_id=$1::int4")
         .bind(id)
         .fetch_one(&pool)
         .await
