@@ -24,7 +24,6 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    //let database_url = "postgres://admin:Passw0rd@localhost:5555/trial";
     let database_url =
         std::env::var("DATABASE_URL").expect("Environmental variable for database not present.");
     let pool = PgPoolOptions::new()
