@@ -4,18 +4,20 @@ use axum::{
     Router,
 };
 use sqlx::postgres::PgPoolOptions;
-
 use std::{env, net::SocketAddr};
-
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod config;
 mod controllers;
 mod errors;
 mod models;
+use config::app_config::parse;
 use controllers::handlers::{create_todo, delete_todo, get_todo, get_todos, update_todo};
 
 #[tokio::main]
 async fn main() {
+    let config = parse();
+
     // Initialize tracing
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
@@ -24,11 +26,9 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let database_url =
-        std::env::var("DATABASE_URL").expect("Environmental variable for database not present.");
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect(&database_url)
+        .connect(&config.database_url)
         .await
         .unwrap();
 

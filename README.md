@@ -35,8 +35,8 @@ To connect to Postgre database via PSQL execute:
 To run the application set the environmental variable DATABASE_URL and execute: `cargo run`
 Afterwards the following endpoints are available:
 
-- Get: localhost:5000/todo/{id}
-- Get: localhost:5000/todos
-- Post: localhost:5000/todo/{id}
-- Put: localhost:5000/todo/{id}
-- Delete: localhost:5000/todo/{id}
+- Get: localhost:5000/todo/{id}/
+- Get: localhost:5000/todos/
+- Post: localhost:5000/todo/{id}/
+- Put: localhost:5000/todo/{id}/
+- Delete: localhost:5000/todo/{id}/
