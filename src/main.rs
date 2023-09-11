@@ -34,11 +34,11 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(|| async { "Hello, World!" }))
-        .route("/todo/:id", get(get_todo))
+        .route("/todo/:id/", get(get_todo))
         .route("/todo/", get(get_todos))
         .route("/todo/", post(create_todo))
-        .route("/todo/:id", put(update_todo))
-        .route("/todo/:id", delete(delete_todo))
+        .route("/todo/:id/", put(update_todo))
+        .route("/todo/:id/", delete(delete_todo))
         .layer(Extension(pool));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 5000));

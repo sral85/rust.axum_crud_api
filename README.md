@@ -3,7 +3,7 @@ Here we provide a small CRUD API in Rust based on the framework axum (https://do
 The API can be used to perform CRUD operations on ToDos. This project can be considered as a small project to learn Rust and extend my knowledge about it. Hence, there is still a lot of room for improvements. Just to name a few:
 
 - Add status of ToDos to be able to mark them as done
-- Improve error handling (tracing of errors)
+- Better handling of environment variables by using clap
 - Improve documentation of involved functions, structs, modules, ...
 - Unit and Integration Tests
 - Authentication
