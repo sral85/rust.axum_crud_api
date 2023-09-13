@@ -12,7 +12,7 @@ mod controllers;
 mod errors;
 mod models;
 use config::app_config::parse;
-use controllers::handlers::{create_todo, delete_todo, get_todo, get_todos, update_todo};
+use controllers::handlers::{create_todo, delete_todo, get_todo, get_todos, update_todo, no_uri};
 
 #[tokio::main]
 async fn main() {
@@ -39,6 +39,7 @@ async fn main() {
         .route("/todo/", post(create_todo))
         .route("/todo/:id/", put(update_todo))
         .route("/todo/:id/", delete(delete_todo))
+        .fallback(no_uri)
         .layer(Extension(pool));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 5000));

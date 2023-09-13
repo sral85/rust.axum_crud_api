@@ -1,7 +1,7 @@
 use axum::{
     extract::{Extension, Path},
-    http::StatusCode,
-    response::Json,
+    http::{StatusCode, Uri},
+    response::{Json, IntoResponse, Response},
 };
 use serde_json::{json, Value};
 
@@ -92,4 +92,8 @@ pub async fn update_todo(
         .map_err(|_| AppError::InternalServerError)?;
 
     Ok((StatusCode::OK, Json(todo)))
+}
+
+pub async fn no_uri(uri: Uri) -> impl IntoResponse {
+    (StatusCode::NOT_FOUND, format!("No route for uri {}", uri))
 }
