@@ -1,7 +1,8 @@
 use axum::{
     extract::{Extension, Path},
+    http::header::{HeaderMap, CONTENT_DISPOSITION, CONTENT_TYPE},
     http::{StatusCode, Uri},
-    response::{Json, IntoResponse, Response},
+    response::{IntoResponse, Json, Response},
 };
 use serde_json::{json, Value};
 
@@ -96,4 +97,14 @@ pub async fn update_todo(
 
 pub async fn no_uri(uri: Uri) -> impl IntoResponse {
     (StatusCode::NOT_FOUND, format!("No route for uri {}", uri))
+}
+
+pub async fn file_download() -> Response {
+    let mut headers = HeaderMap::new();
+    headers.insert(CONTENT_TYPE, "text/csv; charset=utf-8".parse().unwrap());
+    headers.insert(
+        CONTENT_DISPOSITION,
+        "attachment; filename=\"todo.csv\"".parse().unwrap(),
+    );
+    (StatusCode::ACCEPTED, headers, "id,value\n1,2").into_response()
 }

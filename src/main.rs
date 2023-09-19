@@ -12,7 +12,9 @@ mod controllers;
 mod errors;
 mod models;
 use config::app_config::parse;
-use controllers::handlers::{create_todo, delete_todo, get_todo, get_todos, update_todo, no_uri};
+use controllers::handlers::{
+    create_todo, delete_todo, file_download, get_todo, get_todos, no_uri, update_todo,
+};
 
 #[tokio::main]
 async fn main() {
@@ -39,6 +41,7 @@ async fn main() {
         .route("/todo/", post(create_todo))
         .route("/todo/:id/", put(update_todo))
         .route("/todo/:id/", delete(delete_todo))
+        .route("/todo/file_download/", get(file_download))
         .fallback(no_uri)
         .layer(Extension(pool));
 
