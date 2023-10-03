@@ -30,6 +30,9 @@ To use these scripts you need to provide the following environmental variables
 To connect to Postgre database via PSQL execute:
 `PGPASSWORD=$DATABASE_PASSWORD psql -h localhost -U $DATABASE_USER -p $DATABASE_PORT`
 
+- Use ``\l`` to list all databases
+- Use ``\c <database_name>`` to connect to a database
+- Use ``\dt`` to list all tables
 
 ## Execution of Application
 To run the application set the environmental variable DATABASE_URL and execute: `cargo run`

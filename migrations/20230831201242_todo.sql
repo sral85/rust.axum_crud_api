@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS todo (
-   todo_id serial PRIMARY KEY,
+   id VARCHAR (255) NOT NULL PRIMARY KEY,
+   status VARCHAR (255) NOT NULL DEFAULT 'open',
    description VARCHAR (255),
    created_on TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO todo (description)
-VALUES ('do homework'), 
-('clean flat');
+INSERT INTO todo (id, description)
+VALUES ('homework', 'do math homework'), ('clean flat', 'vacuum carpets, clean bath');

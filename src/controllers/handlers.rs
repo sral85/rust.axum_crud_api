@@ -12,10 +12,10 @@ use crate::errors::app_errors::AppError;
 use crate::models::todo::{NewToDo, ToDo, UpdateToDo};
 
 pub async fn get_todo(
-    Path(id): Path<u32>,
+    Path(id): Path<String>,
     Extension(pool): Extension<PgPool>,
 ) -> Result<(StatusCode, Json<ToDo>), AppError> {
-    let sql = "SELECT * FROM todo where todo_id = $1::int4".to_string();
+    let sql = "SELECT * FROM todo where id = $1".to_string();
     let todo = sqlx::query_as::<_, ToDo>(&sql)
         .bind(id.to_string())
         .fetch_one(&pool)
@@ -42,9 +42,10 @@ pub async fn create_todo(
     Extension(pool): Extension<PgPool>,
     Json(new_todo): Json<NewToDo>,
 ) -> Result<(StatusCode, Json<NewToDo>), AppError> {
-    let sql = "INSERT INTO todo (description) values ($1)";
+    let sql = "INSERT INTO todo (id, description) values ($1, $2)";
 
     let _ = sqlx::query(sql)
+        .bind(&new_todo.id)
         .bind(&new_todo.description)
         .execute(&pool)
         .await
@@ -54,17 +55,17 @@ pub async fn create_todo(
 }
 
 pub async fn delete_todo(
-    Path(id): Path<i32>,
+    Path(id): Path<String>,
     Extension(pool): Extension<PgPool>,
 ) -> Result<(StatusCode, Json<Value>), AppError> {
-    let _find = sqlx::query("SELECT * FROM todo where todo_id=$1::int4")
-        .bind(id)
+    let _find = sqlx::query("SELECT * FROM todo where id = $1")
+        .bind(&id)
         .fetch_one(&pool)
         .await
         .map_err(|_| AppError::ObjectNotFound)?;
 
-    sqlx::query("DELETE FROM todo WHERE todo_id=$1::int4")
-        .bind(id)
+    sqlx::query("DELETE FROM todo WHERE id = $1")
+        .bind(&id)
         .execute(&pool)
         .await
         .map_err(|_| AppError::InternalServerError)?;
@@ -73,21 +74,21 @@ pub async fn delete_todo(
 }
 
 pub async fn update_todo(
-    Path(id): Path<i32>,
+    Path(id): Path<String>,
     Extension(pool): Extension<PgPool>,
     Json(todo): Json<UpdateToDo>,
 ) -> Result<(StatusCode, Json<UpdateToDo>), AppError> {
-    let sql = "SELECT * FROM todo where todo_id=$1::int4".to_string();
+    let sql = "SELECT * FROM todo where id=$1".to_string();
 
     let _find: ToDo = sqlx::query_as(&sql)
-        .bind(id)
+        .bind(&id)
         .fetch_one(&pool)
         .await
         .map_err(|_| AppError::ObjectNotFound)?;
 
-    sqlx::query("UPDATE todo SET description=$1 WHERE todo_id=$2::int4")
+    sqlx::query("UPDATE todo SET description=$1 WHERE id=$2")
         .bind(&todo.description)
-        .bind(id)
+        .bind(&id)
         .execute(&pool)
         .await
         .map_err(|_| AppError::InternalServerError)?;
