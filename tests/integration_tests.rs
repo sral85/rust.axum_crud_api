@@ -45,6 +45,17 @@ async fn test_create_and_delete_todo() {
 }
 
 #[tokio::test]
+async fn test_update_todo() {
+    let request_url = format!("{url}todo/{id}/", url = get_base_url(), id="homework");
+    let client = reqwest::Client::new();
+
+    // Update todo with id homework
+    let body = json!({"description": "math homework"});
+    let response = client.put(&request_url).json(&body).send().await.unwrap();
+    assert_eq!(response.status(), reqwest::StatusCode::OK);
+}
+
+#[tokio::test]
 async fn test_fallback_url() {
     let request_url = format!("{url}unknown/", url = get_base_url());
     let client = reqwest::Client::new();
