@@ -4,13 +4,12 @@ extern crate axum_crud_api;
 use axum_crud_api::models::todo;
 use serde_json::json;
 
-fn get_base_url() -> &'static str {
-    "http://127.0.0.1:5000/"
-}
+const BASE_URL: &str = "http://127.0.0.1:5000/";
+
 
 #[tokio::test]
 async fn test_get_todos() {
-    let request_url = format!("{url}todo/", url = get_base_url());
+    let request_url = format!("{url}todo/", url = BASE_URL);
     println!("{}", &request_url);
     let response = reqwest::get(&request_url).await.unwrap();
 
@@ -20,7 +19,7 @@ async fn test_get_todos() {
 
 #[tokio::test]
 async fn test_get_todo() {
-    let request_url = format!("{url}todo/{id}/", url = get_base_url(), id = "homework");
+    let request_url = format!("{url}todo/{id}/", url = BASE_URL, id = "homework");
     println!("{}", request_url);
     let response = reqwest::get(&request_url).await.unwrap();
 
@@ -30,7 +29,7 @@ async fn test_get_todo() {
 
 #[tokio::test]
 async fn test_create_and_delete_todo() {
-    let request_url = format!("{url}todo/", url = get_base_url());
+    let request_url = format!("{url}todo/", url = BASE_URL);
     let client = reqwest::Client::new();
 
     // Create todo with id clean car
@@ -39,14 +38,14 @@ async fn test_create_and_delete_todo() {
     assert_eq!(response.status(), reqwest::StatusCode::CREATED);
 
     // Delete todo with id clean car
-    let request_url = format!("{url}todo/{id}/", url = get_base_url(), id = "clean car");
+    let request_url = format!("{url}todo/{id}/", url = BASE_URL, id = "clean car");
     let response = client.delete(&request_url).send().await.unwrap();
     assert_eq!(response.status(), reqwest::StatusCode::OK);
 }
 
 #[tokio::test]
 async fn test_update_todo() {
-    let request_url = format!("{url}todo/{id}/", url = get_base_url(), id="homework");
+    let request_url = format!("{url}todo/{id}/", url = BASE_URL, id = "homework");
     let client = reqwest::Client::new();
 
     // Update todo with id homework
@@ -57,7 +56,7 @@ async fn test_update_todo() {
 
 #[tokio::test]
 async fn test_fallback_url() {
-    let request_url = format!("{url}unknown/", url = get_base_url());
+    let request_url = format!("{url}unknown/", url = BASE_URL);
     let client = reqwest::Client::new();
     let response = client.get(&request_url).send().await.unwrap();
     assert_eq!(response.status(), reqwest::StatusCode::NOT_FOUND);
